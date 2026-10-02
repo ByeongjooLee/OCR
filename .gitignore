@@ -1,0 +1,8 @@
+*.mdb
+*.ckpt
+*.pt
+*.onnx
+venv/
+runs/
+__pycache__/
+*.pyc

@@ -1,0 +1,39 @@
+{
+ "name": "sasanggye_lines_v1",
+ "source_export": "ocr_data/sg318_v2dsk",
+ "lines": {
+  "train": 12083,
+  "val": 2029
+ },
+ "pages": 308,
+ "issues": 26,
+ "train_chars": 198505,
+ "charset_size": 3316,
+ "hanja_types": 2069,
+ "grade": {
+  "silver": 14112
+ },
+ "heldout_test_issues_excluded": [
+  "0001",
+  "0008",
+  "0018",
+  "0020",
+  "0021",
+  "0022",
+  "0025",
+  "0026",
+  "0027",
+  "0028",
+  "0031",
+  "0032",
+  "0033",
+  "0038",
+  "0042",
+  "0043",
+  "0044",
+  "0063",
+  "0064",
+  "0067"
+ ],
+ "lines_jsonl_sha256": "46553d1ca1c858bfae487a33876fa4bbcab0eee1249d09f812896c1de59c075c"
+}
