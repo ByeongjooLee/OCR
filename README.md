@@ -1,8 +1,12 @@
-# 1950년대 『사상계』 국한문 세로쓰기 OCR 학습데이터
+# KMMOCR 학습데이터 — 1950년대 『사상계』 국한문 세로쓰기
+
+**KMMOCR**(Korean Modern Magazine OCR)은 근대 잡지의 국한문 혼용 세로쓰기 활판 인쇄면을 읽는 비생성형 OCR입니다. 이 저장소는 KMMOCR을 학습하는 데 쓴 공개 학습데이터와 데이터 구축 스크립트를 담습니다.
+- 현재 공개 버전: **KMMOCR R1** (글자 인식 모델 E5, 2026-10-03). 줄·단 검출은 일본 국립국회도서관 NDLOCR-Lite(CC BY 4.0)를 쓰고, 글자 인식 모델은 NDLOCR-Lite의 공개 가중치에서 출발해 한글을 더하고 근대 잡지 자료로 미세조정했습니다.
+- OpenMMLab의 MMOCR과는 관계없습니다.
 
 1950년대 잡지 『사상계』의 국한문 혼용 세로쓰기 활판 인쇄면에서 잘라낸 **줄 이미지와 판독 라벨**입니다. 생성형 AI 없이 로컬에서 재현할 수 있는 OCR 모델을 학습하려고 만들었습니다. 데이터는 계속 쌓아 버전을 올립니다.
 
-Line-level OCR training data (cropped line images + transcriptions) from the 1950s Korean magazine *Sasanggye* (사상계), printed in vertical mixed Hangul–Hanja script. Research use only (CC BY-NC 4.0).
+Line-level OCR training data for **KMMOCR** (Korean Modern Magazine OCR; unrelated to OpenMMLab's MMOCR): cropped line images + transcriptions from the 1950s Korean magazine *Sasanggye* (사상계), printed in vertical mixed Hangul–Hanja script. Research use only (CC BY-NC 4.0).
 
 ## 구성
 
