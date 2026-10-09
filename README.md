@@ -13,6 +13,7 @@ Line-level OCR training data for **KMMOCR** (Korean Modern Magazine OCR; unrelat
 | 경로 | 내용 |
 |---|---|
 | `data/sasanggye_lines_v1/` | 줄 이미지 14,112개(학습 12,083 / 검증 2,029), `lines.jsonl`, `charset.txt`, `stats.json` |
+| `data/gaebyeok_lines_v1/` | 『개벽』(1920~1935) 62개 호의 줄 라벨 메타데이터(이미지 없음, 아래 「한국사DB 잡지」) |
 | `rules/variant_folding_v1.json` | 이체자 → 정자 통일 규칙 223쌍 |
 | `splits/heldout_test_issues.json` | 평가용으로 떼어 둔 호 목록(이 호들은 데이터에 없음) |
 | `layout/` | 『사상계』·『조광』·『문장』·『가톨릭청년』 판형 통계와 단 템플릿 |
@@ -52,10 +53,28 @@ Line-level OCR training data for **KMMOCR** (Korean Modern Magazine OCR; unrelat
 
 자세한 수집·정제 과정과 한계는 [DATASHEET.md](DATASHEET.md)에 있습니다.
 
+## 한국사DB 잡지: 『개벽』 (v2, 2026-10-09)
+
+국사편찬위원회 한국사데이터베이스의 『개벽』 원문 이미지(1920~1935)와 입력문을 대조해 만든 줄 라벨입니다. 용량 때문에 **이미지는 넣지 않고 메타데이터만** 둡니다. 원문 면 이미지는 한국사DB에서 다시 받아 줄 이미지를 똑같이 복원합니다(픽셀 단위로 같음을 확인했습니다).
+
+```
+GB_MAG=013 python -X utf8 scripts/gb_fetch.py 0010                                  # 면 이미지 받기(요청 간격 1.5초)
+GB_MAG=013 python -X utf8 scripts/gb_restore.py data/gaebyeok_lines_v1 0010          # 줄 이미지 복원
+```
+
+- 스크립트는 원래 작업 폴더 구조(`<ROOT>/작업도구/스크립트/`, 데이터는 `<ROOT>/ocr_data/`)를 전제로 하므로, 그 위치에 복사해서 실행합니다. `gb_ocr.py`·`gb_align.py`는 이 저장소에 없는 내부 모듈(NDL 줄 분할, 인식 모델)이 필요하고, 복원(`gb_fetch.py`·`gb_restore.py`)은 Pillow만 있으면 됩니다.
+- 호마다 `{호}.lines.jsonl.gz`(줄)와 `{호}.pages.jsonl.gz`(면 기울기 보정 각도·크기·원본 주소)가 있고, 요약은 `index.json`에 있습니다.
+- 62개 호, 11,726면, 줄 388,142개. 그중 학습에 쓰는 줄(`train=true`)은 260,713개입니다(`silver_ref` 193,369 + `silver_ref_fixed` 67,344). 나머지는 `review`(사람 확인 대기) 56,509줄과 `ocr_raw`(입력문에 없는 광고·목차 등) 70,920줄입니다.
+- 줄은 KMMOCR R4로 읽고 한국사DB 입력문과 글자 단위로 대조했습니다. 입력문이 원본을 바꿔 적은 곳(띄어쓰기, 한자 숫자→아라비아 숫자, 한자→독음 한글, 이체자)은 원본 쪽을 따르고, 된시옷은 현대 된소리로 적었습니다. 규칙과 판정 사유는 `diffs` 필드에 있습니다.
+- 문장부호는 입력문과 대조하지 않았습니다. 점선이 지나치게 긴 줄은 학습에서 빼야 합니다(`scripts/dot_filter.py`).
+- 평가용 시험 호 8개는 넣지 않았습니다(`splits/heldout_test_issues_gaebyeok.json`).
+- 추가 필드: `ocr`(R4 출력), `ref_text`(대조한 입력문 구간), `status`·`diffs`(판정), `image_file`(원문 면 파일), `article`·`title`·`date`(기사 출처).
+
 ## 이용 조건
 
 - **데이터**(`data/`, `layout/`, `rules/`): [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). 학술·비영리 연구에만 쓸 수 있습니다.
 - **코드**(`scripts/`): MIT License (`LICENSE`).
+- 『개벽』 원문 이미지와 입력문의 출처는 국사편찬위원회 한국사데이터베이스(https://db.history.go.kr)입니다. 이 저장소에는 면 이미지를 넣지 않습니다.
 - 면 전체 이미지는 배포하지 않습니다. 학습용으로 잘라낸 줄 단위 이미지와 라벨만 제공합니다.
 - 원문 저작물의 권리는 각 저작권자에게 있습니다. 권리자께서 특정 글의 제외를 원하시면 이 저장소의 Issues로 알려 주십시오. 확인 후 다음 버전에서 해당 줄을 뺍니다.
 - 제3자 구성요소의 출처는 [NOTICE.md](NOTICE.md)에 있습니다.
