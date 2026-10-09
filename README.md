@@ -14,6 +14,7 @@ Line-level OCR training data for **KMMOCR** (Korean Modern Magazine OCR; unrelat
 |---|---|
 | `data/sasanggye_lines_v1/` | 줄 이미지 14,112개(학습 12,083 / 검증 2,029), `lines.jsonl`, `charset.txt`, `stats.json` |
 | `data/gaebyeok_lines_v1/` | 『개벽』(1920~1935) 62개 호의 줄 라벨 메타데이터(이미지 없음, 아래 「한국사DB 잡지」) |
+| `data/ma015_lines_v1/` 등 | 『별건곤』(015)·『동광』(014)·『삼천리』(016): 호별 폴더 `<호>/`에 학습 줄 이미지 `images/<id>.webp`(회색조 WebP 품질 90, 세로줄 원래 방향)와 `lines.jsonl`(라벨 `label`, KMMOCR R4 인식 결과 `ocr`, 대조한 입력문 `ref_text`, 판정 `status`·`diffs`, 줄 상자·출처). 만든 방법은 『개벽』과 같다. 시험 호(번호가 …50인 호)는 넣지 않는다 |
 | `rules/variant_folding_v1.json` | 이체자 → 정자 통일 규칙 223쌍 |
 | `splits/heldout_test_issues.json` | 평가용으로 떼어 둔 호 목록(이 호들은 데이터에 없음) |
 | `layout/` | 『사상계』·『조광』·『문장』·『가톨릭청년』 판형 통계와 단 템플릿 |

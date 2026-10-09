@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""한국사DB 잡지 줄 데이터 → 공개 저장소용 메타데이터(호마다 lines/pages .jsonl.gz). 이미지는 넣지 않는다(gb_restore.py로 복원). 개벽 시험 호는 넣지 않는다.
+"""한국사DB 잡지 줄 데이터 → 공개 저장소용 메타데이터(호마다 lines/pages .jsonl.gz). 이미지는 넣지 않는다(gb_restore.py로 복원). 시험 호(gb_mag.is_test)는 넣지 않는다.
 
   GB_MAG=013 python -X utf8 작업도구/스크립트/gb_publish.py <저장소 data 폴더>
 출력: <폴더>/{데이터 이름}/{호}.lines.jsonl.gz, {호}.pages.jsonl.gz, index.json
@@ -11,8 +11,7 @@ from collections import Counter
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gb_mag import MAG, NAME, PFX, WORK, lines_dir, ROOT  # noqa: E402
-TEST = {"0050", "0150", "0250", "0350", "0450", "0550", "0650", "0740"}   # gb_lmdb.py와 같음
+from gb_mag import MAG, NAME, PFX, WORK, lines_dir, ROOT, is_test  # noqa: E402
 
 KEEP = ("id", "magazine", "issue", "date", "article", "title", "image_file", "ref_page", "box", "dir", "kind",
         "image", "label", "ocr", "grade", "status", "train", "ref_text", "diffs")
@@ -27,7 +26,7 @@ def main(dst):
         if not (d / "stats.json").exists():
             continue
         no = d.name.split("_")[-2]
-        if MAG == "013" and no in TEST:   # 시험 호는 논문 게재 전 공개하지 않는다(로컬에만)
+        if is_test(no):   # 시험 호는 논문 게재 전 공개하지 않는다(로컬에만)
             continue
         rows = [json.loads(l) for l in open(d / "lines.jsonl", encoding="utf-8")]
         with gzip.open(out / f"{no}.lines.jsonl.gz", "wt", encoding="utf-8", compresslevel=9) as f:

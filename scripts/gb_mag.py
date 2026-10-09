@@ -21,3 +21,11 @@ REVIEW = ROOT / ("학습데이터_개벽" if MAG == "013" else "학습데이터_
 
 def lines_dir(no):
     return ROOT / (f"ocr_data/gaebyeok_lines_{no}_v1" if MAG == "013" else f"ocr_data/ma{MAG}_lines_{no}_v1")
+
+
+TEST13 = {"0050", "0150", "0250", "0350", "0450", "0550", "0650", "0740"}
+
+
+def is_test(no):
+    """시험 호(학습·공개 제외). 개벽은 처음 정한 8개, 다른 잡지는 같은 규칙으로 호 번호가 …50인 호(10-09 고정)."""
+    return no in TEST13 if MAG == "013" else int(no) % 100 == 50
