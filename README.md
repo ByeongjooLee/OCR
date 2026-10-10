@@ -1,12 +1,12 @@
-# KMMOCR 학습데이터 — 1950년대 『사상계』 국한문 세로쓰기
+# KMMOCR OCR — 근대 잡지 국한문 세로쓰기 학습데이터
 
 **KMMOCR**(Korean Modern Magazine OCR)은 근대 잡지의 국한문 혼용 세로쓰기 활판 인쇄면을 읽는 비생성형 OCR입니다. 이 저장소는 KMMOCR을 학습하는 데 쓴 공개 학습데이터와 데이터 구축 스크립트를 담습니다.
 - 현재 공개 버전: **KMMOCR R1** (글자 인식 모델 E5, 2026-10-03). 줄·단 검출은 일본 국립국회도서관 NDLOCR-Lite(CC BY 4.0)를 쓰고, 글자 인식 모델은 NDLOCR-Lite의 공개 가중치에서 출발해 한글을 더하고 근대 잡지 자료로 미세조정했습니다.
 - OpenMMLab의 MMOCR과는 관계없습니다.
 
-1950년대 잡지 『사상계』의 국한문 혼용 세로쓰기 활판 인쇄면에서 잘라낸 **줄 이미지와 판독 라벨**입니다. 생성형 AI 없이 로컬에서 재현할 수 있는 OCR 모델을 학습하려고 만들었습니다. 데이터는 계속 쌓아 버전을 올립니다.
+1920~1950년대 근대 잡지의 국한문 혼용 활판 인쇄면(세로쓰기 중심, 가로쓰기 포함)에서 잘라낸 **줄 이미지와 판독 라벨**입니다. 잡지별 구성은 아래 「구성」에 있습니다. 생성형 AI 없이 로컬에서 재현할 수 있는 OCR 모델을 학습하려고 만들었습니다. 데이터는 계속 쌓아 버전을 올립니다.
 
-Line-level OCR training data for **KMMOCR** (Korean Modern Magazine OCR; unrelated to OpenMMLab's MMOCR): cropped line images + transcriptions from the 1950s Korean magazine *Sasanggye* (사상계), printed in vertical mixed Hangul–Hanja script. Research use only (CC BY-NC 4.0).
+Line-level OCR training data for **KMMOCR** (Korean Modern Magazine OCR; unrelated to OpenMMLab's MMOCR): cropped line images + transcriptions from Korean modern magazines (1920s–1950s), printed in mixed Hangul–Hanja script, mostly vertical. Research use only (CC BY-NC 4.0).
 
 ## 구성
 
@@ -75,7 +75,9 @@ GB_MAG=013 python -X utf8 scripts/gb_restore.py data/gaebyeok_lines_v1 0010     
 
 - **데이터**(`data/`, `layout/`, `rules/`): [CC BY-NC 4.0](https://creativecommons.org/licenses/by-nc/4.0/). 학술·비영리 연구에만 쓸 수 있습니다.
 - **코드**(`scripts/`): MIT License (`LICENSE`).
-- 『개벽』 원문 이미지와 입력문의 출처는 국사편찬위원회 한국사데이터베이스(https://db.history.go.kr)입니다. 이 저장소에는 면 이미지를 넣지 않습니다.
+- 『개벽』·『별건곤』·『동광』·『삼천리』의 원문 이미지와 입력문의 출처는 국사편찬위원회 한국사데이터베이스(https://db.history.go.kr)입니다. 이 저장소에는 면 이미지를 넣지 않습니다.
+- 한국사데이터베이스 자료는 국사편찬위원회 저작권 정책을 따릅니다. 저작권법 제24조의2(공공저작물의 자유이용)에 따라 학술·연구 등 비상업 목적으로 출처(국사편찬위원회, 한국사데이터베이스 https://db.history.go.kr, 잡지명·발행연도)를 밝혀 이용할 수 있으며, 이 저장소는 상업적 목적 없이 학술 연구용으로만 씁니다. 각 줄의 출처(잡지·호·발행일·기사·원문 면 파일)는 `lines.jsonl`에 있습니다.
+- 국사편찬위원회나 권리자께서 이용에 문제가 있다고 알려 주시면 확인 즉시 해당 자료를 이 저장소에서 삭제하겠습니다(Issues 또는 저장소 관리자에게 연락).
 - 면 전체 이미지는 배포하지 않습니다. 학습용으로 잘라낸 줄 단위 이미지와 라벨만 제공합니다.
 - 원문 저작물의 권리는 각 저작권자에게 있습니다. 권리자께서 특정 글의 제외를 원하시면 이 저장소의 Issues로 알려 주십시오. 확인 후 다음 버전에서 해당 줄을 뺍니다.
 - 제3자 구성요소의 출처는 [NOTICE.md](NOTICE.md)에 있습니다.
