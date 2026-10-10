@@ -1,0 +1,385 @@
+{
+ "magazine": "동광",
+ "code": "ma_014",
+ "issues": [
+  {
+   "issue": "ma_014_0010",
+   "pages": 56,
+   "lines": 3165,
+   "grades": {
+    "ocr_raw": 496,
+    "silver_ref": 1772,
+    "review": 391,
+    "silver_ref_fixed": 506
+   },
+   "train_lines": 2278
+  },
+  {
+   "issue": "ma_014_0020",
+   "pages": 68,
+   "lines": 3481,
+   "grades": {
+    "ocr_raw": 451,
+    "silver_ref": 2084,
+    "review": 426,
+    "silver_ref_fixed": 520
+   },
+   "train_lines": 2604
+  },
+  {
+   "issue": "ma_014_0030",
+   "pages": 70,
+   "lines": 3694,
+   "grades": {
+    "ocr_raw": 467,
+    "silver_ref": 1879,
+    "review": 602,
+    "silver_ref_fixed": 746
+   },
+   "train_lines": 2625
+  },
+  {
+   "issue": "ma_014_0040",
+   "pages": 84,
+   "lines": 4803,
+   "grades": {
+    "ocr_raw": 1033,
+    "silver_ref": 2201,
+    "review": 795,
+    "silver_ref_fixed": 774
+   },
+   "train_lines": 2975
+  },
+  {
+   "issue": "ma_014_0070",
+   "pages": 100,
+   "lines": 5125,
+   "grades": {
+    "ocr_raw": 757,
+    "silver_ref": 2700,
+    "review": 693,
+    "silver_ref_fixed": 975
+   },
+   "train_lines": 3675
+  },
+  {
+   "issue": "ma_014_0080",
+   "pages": 200,
+   "lines": 10296,
+   "grades": {
+    "ocr_raw": 1637,
+    "silver_ref": 4939,
+    "review": 1570,
+    "silver_ref_fixed": 2150
+   },
+   "train_lines": 7089
+  },
+  {
+   "issue": "ma_014_0090",
+   "pages": 118,
+   "lines": 7548,
+   "grades": {
+    "ocr_raw": 2066,
+    "silver_ref": 3653,
+    "review": 933,
+    "silver_ref_fixed": 896
+   },
+   "train_lines": 4549
+  },
+  {
+   "issue": "ma_014_0100",
+   "pages": 108,
+   "lines": 6170,
+   "grades": {
+    "ocr_raw": 1448,
+    "silver_ref": 2803,
+    "review": 851,
+    "silver_ref_fixed": 1068
+   },
+   "train_lines": 3871
+  },
+  {
+   "issue": "ma_014_0110",
+   "pages": 120,
+   "lines": 6585,
+   "grades": {
+    "ocr_raw": 1859,
+    "silver_ref": 3160,
+    "review": 812,
+    "silver_ref_fixed": 754
+   },
+   "train_lines": 3914
+  },
+  {
+   "issue": "ma_014_0120",
+   "pages": 96,
+   "lines": 5652,
+   "grades": {
+    "ocr_raw": 1619,
+    "silver_ref": 2882,
+    "review": 661,
+    "silver_ref_fixed": 490
+   },
+   "train_lines": 3372
+  },
+  {
+   "issue": "ma_014_0130",
+   "pages": 76,
+   "lines": 4881,
+   "grades": {
+    "ocr_raw": 1190,
+    "silver_ref": 2741,
+    "review": 495,
+    "silver_ref_fixed": 455
+   },
+   "train_lines": 3196
+  },
+  {
+   "issue": "ma_014_0140",
+   "pages": 86,
+   "lines": 5642,
+   "grades": {
+    "ocr_raw": 1622,
+    "silver_ref": 3050,
+    "review": 516,
+    "silver_ref_fixed": 454
+   },
+   "train_lines": 3504
+  },
+  {
+   "issue": "ma_014_0160",
+   "pages": 102,
+   "lines": 5209,
+   "grades": {
+    "ocr_raw": 1053,
+    "review": 654,
+    "silver_ref": 2885,
+    "silver_ref_fixed": 617
+   },
+   "train_lines": 3502
+  },
+  {
+   "issue": "ma_014_0170",
+   "pages": 106,
+   "lines": 6135,
+   "grades": {
+    "ocr_raw": 1519,
+    "review": 551,
+    "silver_ref": 3507,
+    "silver_ref_fixed": 558
+   },
+   "train_lines": 4065
+  },
+  {
+   "issue": "ma_014_0180",
+   "pages": 74,
+   "lines": 3886,
+   "grades": {
+    "ocr_raw": 1194,
+    "silver_ref": 1807,
+    "silver_ref_fixed": 457,
+    "review": 428
+   },
+   "train_lines": 2264
+  },
+  {
+   "issue": "ma_014_0190",
+   "pages": 104,
+   "lines": 5420,
+   "grades": {
+    "ocr_raw": 760,
+    "review": 484,
+    "silver_ref": 3613,
+    "silver_ref_fixed": 563
+   },
+   "train_lines": 4176
+  },
+  {
+   "issue": "ma_014_0200",
+   "pages": 98,
+   "lines": 6442,
+   "grades": {
+    "ocr_raw": 1231,
+    "review": 517,
+    "silver_ref": 4265,
+    "silver_ref_fixed": 429
+   },
+   "train_lines": 4694
+  },
+  {
+   "issue": "ma_014_0210",
+   "pages": 90,
+   "lines": 6037,
+   "grades": {
+    "ocr_raw": 1702,
+    "silver_ref": 3520,
+    "review": 431,
+    "silver_ref_fixed": 384
+   },
+   "train_lines": 3904
+  },
+  {
+   "issue": "ma_014_0230",
+   "pages": 108,
+   "lines": 7785,
+   "grades": {
+    "ocr_raw": 1111,
+    "silver_ref": 5552,
+    "review": 652,
+    "silver_ref_fixed": 470
+   },
+   "train_lines": 6022
+  },
+  {
+   "issue": "ma_014_0240",
+   "pages": 108,
+   "lines": 8067,
+   "grades": {
+    "ocr_raw": 1285,
+    "review": 611,
+    "silver_ref": 5649,
+    "silver_ref_fixed": 522
+   },
+   "train_lines": 6171
+  },
+  {
+   "issue": "ma_014_0260",
+   "pages": 134,
+   "lines": 9517,
+   "grades": {
+    "ocr_raw": 2574,
+    "silver_ref": 5548,
+    "review": 831,
+    "silver_ref_fixed": 564
+   },
+   "train_lines": 6112
+  },
+  {
+   "issue": "ma_014_0270",
+   "pages": 122,
+   "lines": 6549,
+   "grades": {
+    "ocr_raw": 1061,
+    "review": 602,
+    "silver_ref_fixed": 464,
+    "silver_ref": 4422
+   },
+   "train_lines": 4886
+  },
+  {
+   "issue": "ma_014_0290",
+   "pages": 116,
+   "lines": 7788,
+   "grades": {
+    "ocr_raw": 1757,
+    "review": 537,
+    "silver_ref": 5089,
+    "silver_ref_fixed": 405
+   },
+   "train_lines": 5494
+  },
+  {
+   "issue": "ma_014_0310",
+   "pages": 145,
+   "lines": 9990,
+   "grades": {
+    "ocr_raw": 2127,
+    "review": 691,
+    "silver_ref": 6596,
+    "silver_ref_fixed": 576
+   },
+   "train_lines": 7172
+  },
+  {
+   "issue": "ma_014_0320",
+   "pages": 210,
+   "lines": 12150,
+   "grades": {
+    "ocr_raw": 2452,
+    "review": 1031,
+    "silver_ref_fixed": 1014,
+    "silver_ref": 7653
+   },
+   "train_lines": 8667
+  },
+  {
+   "issue": "ma_014_0330",
+   "pages": 109,
+   "lines": 6474,
+   "grades": {
+    "ocr_raw": 871,
+    "review": 529,
+    "silver_ref": 4543,
+    "silver_ref_fixed": 531
+   },
+   "train_lines": 5074
+  },
+  {
+   "issue": "ma_014_0340",
+   "pages": 130,
+   "lines": 7772,
+   "grades": {
+    "ocr_raw": 1029,
+    "silver_ref": 5590,
+    "review": 673,
+    "silver_ref_fixed": 480
+   },
+   "train_lines": 6070
+  },
+  {
+   "issue": "ma_014_0360",
+   "pages": 138,
+   "lines": 8394,
+   "grades": {
+    "ocr_raw": 2458,
+    "silver_ref": 4788,
+    "review": 682,
+    "silver_ref_fixed": 466
+   },
+   "train_lines": 5254
+  },
+  {
+   "issue": "ma_014_0370",
+   "pages": 130,
+   "lines": 6761,
+   "grades": {
+    "ocr_raw": 1445,
+    "review": 542,
+    "silver_ref": 4328,
+    "silver_ref_fixed": 446
+   },
+   "train_lines": 4774
+  },
+  {
+   "issue": "ma_014_0380",
+   "pages": 135,
+   "lines": 7715,
+   "grades": {
+    "ocr_raw": 1217,
+    "review": 566,
+    "silver_ref": 5456,
+    "silver_ref_fixed": 476
+   },
+   "train_lines": 5932
+  },
+  {
+   "issue": "ma_014_0390",
+   "pages": 116,
+   "lines": 5801,
+   "grades": {
+    "ocr_raw": 1688,
+    "silver_ref": 3193,
+    "review": 548,
+    "silver_ref_fixed": 372
+   },
+   "train_lines": 3565
+  }
+ ],
+ "totals": {
+  "ocr_raw": 43179,
+  "silver_ref": 121868,
+  "review": 20305,
+  "silver_ref_fixed": 19582,
+  "pages": 3457
+ }
+}
