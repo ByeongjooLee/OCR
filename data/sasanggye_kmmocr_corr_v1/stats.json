@@ -1,0 +1,60 @@
+{
+ "name": "sasanggye_kmmocr_corr_v1",
+ "source_export": "ocr_data/sg_kmmocr_corr_v1",
+ "layout": "issue",
+ "lines": {
+  "train": 199,
+  "val": 16
+ },
+ "pages": 113,
+ "issues": 6,
+ "train_chars": 3804,
+ "charset_size": 853,
+ "hanja_types": 395,
+ "grade": {
+  "bronze_kmmocr_corr": 215
+ },
+ "ocr_model": "KMMOCR E20avg12_parseq (기사 판독 초벌)",
+ "heldout_test_issues_excluded": [
+  "0001",
+  "0008",
+  "0018",
+  "0020",
+  "0021",
+  "0022",
+  "0025",
+  "0026",
+  "0027",
+  "0028",
+  "0031",
+  "0032",
+  "0033",
+  "0038",
+  "0042",
+  "0043",
+  "0044",
+  "0063",
+  "0064",
+  "0067"
+ ],
+ "source_filter": {
+  "시험호_폴더": 67,
+  "삭제": 650,
+  "사용": 215,
+  "최종본과다름": 6,
+  "불확실글자": 20,
+  "바뀐것없음": 192,
+  "본문아님": 56,
+  "길이": 1,
+  "가로줄": 3,
+  "글자수차이": 3
+ },
+ "lines_jsonl_sha256_by_issue": {
+  "0029": "7c4675948922f04a427b5d57588a8d3d9def4fa645303e140cf586dbf79ec3ae",
+  "0034": "33b2a4f2eac8e8af9b76d92fce11267c1c56cfd40a167e9be54b0e55a2066110",
+  "0036": "7d015a074577afb4285106d8fb923d5ce9ee7710d6fb47ed745b35f6d8b50ffe",
+  "0037": "676c8561e63fa0a4e67daa0692b2e9297606aa56fd36990403077fd08ed349f6",
+  "0039": "09d501aeb1b40f5b84e2e8f425d53eb1513f39f333345bae1ad2f1b1ba54cc55",
+  "0040": "66a7460295dac9f8bf8407cf53db2459b0d00e769d28dcf218df555931885537"
+ }
+}

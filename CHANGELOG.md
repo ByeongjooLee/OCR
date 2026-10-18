@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v2.2 (2026-10-18)
+- `data/sasanggye_lines_v2`: 『사상계』 26개 호 308면, 세로줄 14,091개(학습 12,064 / 검증 2,027). v1 라벨에 KMMOCR 대조 재교정(면 이미지로 확인한 판정)을 얹었습니다. v1과 라벨이 다른 줄 198개(`label_prev`), 등급 `silver` 13,886 / `silver_fixed` 205. 호별 폴더·WebP·KMMOCR 인식 결과(`ocr`, `ocr_alt`) 형식. v1 폴더는 그대로 둡니다.
+- `data/sasanggye_kmmocr_corr_v1`: KMMOCR 『사상계』 기사 판독에서 이미지와 대조해 고친 줄만 215개(6개 호, 등급 `bronze_kmmocr_corr`).
+- `scripts/`: `sg318_export_recorr.py`(재교정 판정을 줄 라벨에 얹기), `sg_kmmocr_corr_export.py`(고친 줄 내보내기), `release_build.py`(호별 WebP 형식·인식 결과 옵션).
+
 ## v2.1 (2026-10-10~)
 - 『별건곤』·『동광』·『삼천리』(국사편찬위원회 한국사DB): 호별 폴더 `data/ma0NN_lines_v1/<호>/`에 학습 줄 이미지(WebP)와 `lines.jsonl`(라벨·KMMOCR R4 인식 결과·판정)을 20개 호씩 올림. 『개벽』은 v2의 메타데이터만 둔다.
 

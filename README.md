@@ -13,6 +13,8 @@ Line-level OCR training data for **KMMOCR** (Korean Modern Magazine OCR; unrelat
 | 경로 | 내용 |
 |---|---|
 | `data/sasanggye_lines_v1/` | 줄 이미지 14,112개(학습 12,083 / 검증 2,029), `lines.jsonl`, `charset.txt`, `stats.json` |
+| `data/sasanggye_lines_v2/` | 『사상계』 v1과 같은 308면, 줄 14,091개(학습 12,064 / 검증 2,027). v1 라벨에 KMMOCR 대조 재교정을 얹은 판. 호별 폴더 `<호>/images/<id>.webp` + `<호>/lines.jsonl`. 추가 필드 `label_prev`(v1 라벨), `recorr_fixes`, `ocr`·`ocr_alt`(KMMOCR 인식 결과) |
+| `data/sasanggye_kmmocr_corr_v1/` | 『사상계』 KMMOCR 기사 판독에서 이미지와 대조해 고친 줄만 215개(등급 `bronze_kmmocr_corr`). 추가 필드 `label_raw`, `ocr`·`ocr_alt`(고치기 전 초벌), `minp`, `corr` |
 | `data/gaebyeok_lines_v1/` | 『개벽』(1920~1935) 62개 호의 줄 라벨 메타데이터(이미지 없음, 아래 「한국사DB 잡지」) |
 | `data/ma015_lines_v1/` 등 | 『별건곤』(015)·『동광』(014)·『삼천리』(016): 호별 폴더 `<호>/`에 학습 줄 이미지 `images/<id>.webp`(회색조 WebP 품질 90, 세로줄 원래 방향)와 `lines.jsonl`(라벨 `label`, KMMOCR R4 인식 결과 `ocr`, 대조한 입력문 `ref_text`, 판정 `status`·`diffs`, 줄 상자·출처). 만든 방법은 『개벽』과 같다. 시험 호(번호가 …50인 호)는 넣지 않는다 |
 | `rules/variant_folding_v1.json` | 이체자 → 정자 통일 규칙 223쌍 |
@@ -40,6 +42,8 @@ Line-level OCR training data for **KMMOCR** (Korean Modern Magazine OCR; unrelat
 |---|---|
 | `gold` | 사람이 이미지와 대조해 확정 |
 | `silver` | 생성형 모델 판독 두 벌을 대조하고 불일치는 규칙으로 정함 (v1 전부) |
+| `silver_fixed` | `silver` 줄 중 KMMOCR 대조 재교정(이미지 확인)으로 글자를 바꾼 줄 (sasanggye_lines_v2) |
+| `bronze_kmmocr_corr` | KMMOCR 판독의 불확실 구간을 Claude가 이미지와 대조해 고친 줄, 사람 확인 전 |
 | `bronze` | 생성형 단일 판독 |
 | `ocr_raw` | 기성 OCR 출력 |
 | `pseudo` | 우리 모델의 자가학습 의사라벨 |
