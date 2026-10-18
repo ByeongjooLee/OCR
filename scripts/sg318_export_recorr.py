@@ -1,15 +1,16 @@
 # -*- coding: utf-8 -*-
 """사상계 318면 줄 라벨 새 버전: Fable T 라벨(sg318_v2dsk와 같은 원천) 위에 KMMOCR 대조 재교정의 지면 확인 판정을 얹는다 (2026-10-18).
 
-  python -X utf8 작업도구/스크립트/sg318_export_recorr.py [--name v3dsk] [--dry]
+  python -X utf8 작업도구/스크립트/sg318_export_recorr.py [--name v4dsk] [--dry]
 
 재교정(sg_audit_fix.py, 1~9차)은 기존 생성형 전사를 고쳤고, 학습 라벨은 Fable T 재판독이 원천이라 그대로였다.
 판정마다 지면 조각을 직접 보았으므로 그 자리의 인쇄 글자는 확정이다. 이것을 Fable 라벨에 옮긴다.
-- 반영(OCR·FIX·유형 일괄): 지면 = 반영한 글자. Fable이 기존 전사와 같으면 바꾸고, 이미 지면과 같으면 그대로, 둘 다와 다르면 지면 글자로 바꾼다.
+- 반영(OCR·FIX·유형 일괄): 지면 = 반영한 글자. Fable이 기존 전사와 같으면 바꾸고, 이미 지면과 같으면 그대로 둔다.
+  Fable이 기존 전사·OCR 둘 다와 다르면(판정 때 보지 않은 셋째 읽기) 바꾸지 않고 그 줄을 뺀다(삼자불일치, 사람 검수 후보).
 - 기존(지면 = 기존 전사): Fable이 OCR 쪽이거나 다른 글자면 기존 전사 글자로 바꾼다.
 - 불명: 그 글자를 불확실로 표시해 해당 줄을 학습에서 뺀다(사람 검수 후보).
 자리 찾기: 판정 기록의 앞뒤 문맥(ctx_existing, 앞뒤 5자)으로 Fable 문자열에서 한 곳만 맞을 때만 쓴다. 못 찾은 자리는 기록만 남긴다.
-나머지는 sg318_export.py와 같다(정렬·품질 필터·이체자 정자 통일·세로줄 90° 회전, 기울기 보정 면 dsk_src_v1).
+줄 경계는 Fable 원문으로 정한 v2dsk 경계를 그대로 쓰고 그 안의 글자만 바꾼다. 나머지는 sg318_export.py와 같다(정렬·품질 필터·이체자 정자 통일·세로줄 90° 회전, 기울기 보정 면 dsk_src_v1).
 출력: ocr_data/sg318_<name>/{train,val}/data.mdb, lines.jsonl(label_prev·fixes·grade), overlay_log.jsonl, charset.txt, stats.json
 """
 import argparse
@@ -122,15 +123,17 @@ def locate(K, dec):
 
 
 def overlay(F, unc, decs):
-    """F(Fable 정렬용 문자열), unc([?] 위치) + 판정 → (새 F, 새 unc, fixed 위치, 불명 위치, 기록)."""
+    """F(Fable 정렬용 문자열) + 판정 → (편집 [(시작, 끝, 넣을 글자|None, 종류)] — F 위치, 기록).
+    줄 경계는 바꾸지 않는다(v2dsk 경계 그대로. 10-18 검토: 경계를 다시 정렬하면 한자 닻이 흔들려 글자가 옆 줄로 넘어감).
+    Fable이 기존 전사·OCR 둘 다와 다른 자리(판정 때 Fable 읽기는 보지 않음)는 바꾸지 않고 그 줄을 뺀다
+    (삼자불일치 → 사람 검수 후보. 10-18 검토에서 Fable이 맞은 「日誌等」을 「日書等」으로 덮어쓴 예)."""
     kidx = [i for i, c in enumerate(F) if len(unicodedata.normalize("NFC", c)) == 1 and KEEP.match(unicodedata.normalize("NFC", c))]
     K = "".join(unicodedata.normalize("NFC", F[i]) for i in kidx)
-    toks = [dict(c=c, unc=i in unc, fix=False, unclear=False) for i, c in enumerate(F)]
     edits, log = [], []
     for d in decs:
         st, a, b = locate(K, d)
         rec = dict(round=d["round"], id=d["id"], file=d["file"], kind=d["kind"], existing=d["existing"], ocr=d["ocr"],
-                   target=d["target"], status=st)
+                   target=d["target"], status=st, ctx=d["ctx"])
         if a is None:
             log.append(rec); continue
         fable = K[a:b]
@@ -141,38 +144,27 @@ def overlay(F, unc, decs):
                 rec["status"] = "span_has_punct"; log.append(rec); continue
         else:
             fa = fb = kidx[a] if a < len(kidx) else len(F)
+        rec["f_span"] = [fa, fb]
         if d["kind"] == "unclear":
-            edits.append((fa, fb, None, "unclear"))
-            rec["action"] = "unclear"
+            edits.append((fa, fb, None, "unclear")); rec["action"] = "unclear"
         elif fable == d["target"]:
             rec["action"] = "same"
+        elif st == "fable=other" and fable not in (d["existing"], d["ocr"]):
+            edits.append((fa, fb, None, "3way")); rec["action"] = "exclude_3way"
         else:
-            edits.append((fa, fb, d["target"], "fix"))
-            rec["action"] = "replace"
+            edits.append((fa, fb, d["target"], "fix")); rec["action"] = "replace"
         log.append(rec)
-    # 겹치는 편집은 뒤의 것을 버린다
     edits.sort(key=lambda e: (e[0], e[1]))
     kept, last = [], -1
-    for e in edits:
+    for e in edits:   # 겹치는 편집은 뒤의 것을 버린다
         if e[0] < last or (kept and e[0] == kept[-1][0] and e[0] == e[1] == kept[-1][1]):
             continue
         kept.append(e); last = max(last, e[1])
-    for fa, fb, rep, kind in sorted(kept, key=lambda e: -e[0]):
-        if kind == "unclear":
-            span = range(fa, fb) if fb > fa else range(max(0, fa - 1), min(len(toks), fa + 1))
-            for i in span:
-                toks[i]["unclear"] = True
-        else:
-            toks[fa:fb] = [dict(c=ch, unc=False, fix=True, unclear=False) for ch in rep]
-            if not rep and fa > 0:   # 삭제: 앞 글자에 표시
-                toks[fa - 1]["fix"] = True
-    newF = "".join(t["c"] for t in toks)
-    return (newF, {i for i, t in enumerate(toks) if t["unc"]}, {i for i, t in enumerate(toks) if t["fix"]},
-            {i for i, t in enumerate(toks) if t["unclear"]}, log)
+    return kept, log
 
 
-def export_page(F, unc, lines, extra=None):
-    """sg318_export.py의 줄 나누기·필터 그대로. extra: (fixed, unclear) 위치 집합."""
+def export_page(F, unc, lines, edits=()):
+    """sg318_export.py의 줄 나누기·필터 그대로(F 기준 경계). edits는 경계 안에서만 글자를 바꾼다."""
     lb = line_bounds(F, lines)
     if not lb:
         return []
@@ -181,16 +173,23 @@ def export_page(F, unc, lines, extra=None):
     for li, s0, s1 in bounds:
         ln = lines[li]
         raw = F[s0:s1 + 1]
-        label = norm_label(raw)
         ntext = ln["text"].replace(" ", "")
         vertical = ln.get("isVertical") == "true"
         lh = [k for k in range(s0, s1 + 1) if HANJA.match(F[k])]
         ok = sum(1 for k in lh if t2h[k] is not None and owner[t2h[k]] == li and F[k] == H[t2h[k]])
         ratio = len(raw) / max(1, len(ntext))
-        fixes = unclear = 0
-        if extra:
-            fixes = sum(1 for k in range(s0, s1 + 1) if k in extra[0])
-            unclear = sum(1 for k in range(s0, s1 + 1) if k in extra[1])
+        mine = [e for e in edits if (s0 <= e[0] <= s1) or (e[0] == e[1] == s1 + 1) or (e[0] < s0 < e[1])]
+        new, fixes, flag = raw, 0, None
+        for fa, fb, rep, kind in sorted(mine, key=lambda e: -e[0]):
+            if fa < s0 or fb > s1 + 1:
+                flag = "경계걸침"; continue
+            if kind == "unclear":
+                flag = flag or "재교정불명"; continue
+            if kind == "3way":
+                flag = flag or "삼자불일치"; continue
+            new = new[:fa - s0] + rep + new[fb - s0:]
+            fixes += max(1, len(rep))
+        label = norm_label(new)
         reason = None
         if not vertical:
             reason = "가로줄"
@@ -198,18 +197,19 @@ def export_page(F, unc, lines, extra=None):
             reason = "정렬품질"
         elif "□" in raw or any(s0 <= k <= s1 for k in unc):
             reason = "불확실글자"
-        elif unclear:
-            reason = "재교정불명"
+        elif flag:
+            reason = flag
         elif not 1 <= len(label) <= 60:
             reason = "길이"
         xs = [p[0] for p in ln["boundingBox"]]; ys = [p[1] for p in ln["boundingBox"]]
-        out.append(dict(li=li, label=label, reason=reason, fixes=fixes, box=[min(xs), min(ys), max(xs), max(ys)]))
+        out.append(dict(li=li, label=label, label_prev=norm_label(raw), reason=reason, fixes=fixes,
+                        box=[min(xs), min(ys), max(xs), max(ys)]))
     return out
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--name", default="v3dsk")
+    ap.add_argument("--name", default="v4dsk")
     ap.add_argument("--pages", default=str(ROOT / "ocr_data/dsk_src_v1/train_pages"))
     ap.add_argument("--ndl", default=str(ROOT / "ocr_data/dsk_src_v1/train_ndl"))
     ap.add_argument("--dry", action="store_true", help="겹치기 통계만")
@@ -236,19 +236,16 @@ def main():
         F0, unc0 = clean_transcript(fp.read_text(encoding="utf-8"))
         files = r["transcript_file"].split(" + ")
         pdecs = [d for f in files for d in by_key.get((f, f"{r['page']:04d}"), [])]
-        F, unc, fixed, unclear, log = overlay(F0, unc0, pdecs)
+        edits, log = overlay(F0, unc0, pdecs)
         for x in log:
             x["page_id"] = r["id"]
             ostat[(x["kind"], x["status"], x.get("action", "-"))] += 1
         logs += log
         lines = [b for blk in json.loads(jp.read_text(encoding="utf-8"))["contents"] for b in blk]
-        new = export_page(F, unc, lines, (fixed, unclear))
-        prev = {x["li"]: x for x in export_page(F0, unc0, lines)} if pdecs else None
+        new = export_page(F0, unc0, lines, edits)
         if a.dry:
             for x in new:
                 stats[x["reason"] or "사용"] += 1
-                if x["fixes"] and not x["reason"]:
-                    stats["사용_고친줄"] += 1
             continue
         img = Image.open(PAGES / f"{r['id']}.png")
         sp = "val" if r["split"] == "validation" else "train"
@@ -256,14 +253,13 @@ def main():
             stats[x["reason"] or "사용"] += 1
             if x["reason"]:
                 continue
-            p = prev.get(x["li"]) if prev is not None else x
-            label_prev = p["label"] if p and not p["reason"] else None
-            changed = label_prev != x["label"]
+            changed = x["label_prev"] != x["label"]
             stats["사용_라벨바뀜" if changed else "사용_라벨같음"] += 1
             split_samples[sp].append((png(crop(img, x["box"], True)), x["label"]))
             rows.append(dict(id=f"{r['id']}_L{x['li']:03d}", page=r["id"], issue=r["issue"], split=sp, box=x["box"],
-                             label=x["label"], label_prev=label_prev, recorr_fixes=x["fixes"],
-                             grade="silver_fixed" if x["fixes"] else "silver"))
+                             label=x["label"], label_prev=x["label_prev"], recorr_fixes=x["fixes"],
+                             grade="silver_fixed" if changed else "silver"))
+
     print("판정 겹치기:", len(decs), "건 중 318면 해당", len(logs))
     for k, v in sorted(ostat.items(), key=lambda kv: -kv[1]):
         print("  ", k, v)
@@ -283,7 +279,7 @@ def main():
     (X / "charset.txt").write_text(charset, encoding="utf-8")
     st = dict(
         name=f"sg318_{a.name}", created="2026-10-18", script="작업도구/스크립트/sg318_export_recorr.py",
-        label_source="fable_T + KMMOCR 대조 재교정 지면 판정(1~9차)", base_version="sg318_v2dsk",
+        label_source="fable_T + KMMOCR 대조 재교정 지면 판정(1~9차)", base_version="sg318_v2dsk", note="10-18 첫 판 v3dsk는 줄 경계 밀림·삼자불일치 덮어쓰기 문제로 폐기, 이 판으로 대체",
         filter={k: v for k, v in stats.items() if not k.startswith("사용_")} | {"사용": stats["사용"]},
         label_changed_vs_prev=stats["사용_라벨바뀜"], label_same_vs_prev=stats["사용_라벨같음"],
         train=len(split_samples["train"]), val=len(split_samples["val"]),

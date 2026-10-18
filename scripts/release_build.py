@@ -26,7 +26,7 @@ ROOT = Path(__file__).resolve().parents[2]
 BENCH = ROOT / "OCR_사상계/벤치마크_Sol_Astra"
 D318 = ROOT / "학습데이터_사상계318"
 ART_PAGES = ROOT / "ocr_data/article_pages"
-EXTRA = ("label_prev", "recorr_fixes", "label_raw", "ocr", "ocr_alt", "ocr_model", "minp", "corr")
+EXTRA = ("label_prev", "recorr_fixes", "sim", "label_raw", "ocr", "ocr_alt", "ocr_model", "minp", "corr")
 
 
 def add_ocr(rows, crops):
